@@ -11,7 +11,6 @@ const DivideConquerUI = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
 
-  // Closest Pair Algorithm (unchanged)
   const closestPairBrute = (points) => {
     let minDist = Infinity;
     let pair = null;
@@ -124,7 +123,6 @@ const DivideConquerUI = () => {
     return { result: finalResult, steps: stepLog };
   };
 
-  // Karatsuba Integer Multiplication without BigInt
   const karatsubaMultiply = (x, y, stepLog = [], depth = 0) => {
     // Convert to strings to handle large numbers
     const xStr = x.toString();
@@ -153,7 +151,6 @@ const DivideConquerUI = () => {
     const n = Math.max(xStr.length, yStr.length);
     const m = Math.floor(n / 2);
 
-    // Split numbers using string manipulation
     const splitNumber = (numStr, position) => {
       const str = numStr.padStart(n, '0');
       const highStr = str.substring(0, str.length - position) || '0';
@@ -177,7 +174,6 @@ const DivideConquerUI = () => {
       message: `Split numbers at position ${m}`
     });
 
-    // Recursive calls
     const z0 = karatsubaMultiply(xSplit.low, ySplit.low, stepLog, depth + 1);
     const z1 = karatsubaMultiply(
       xSplit.low + xSplit.high, 
@@ -187,7 +183,6 @@ const DivideConquerUI = () => {
     );
     const z2 = karatsubaMultiply(xSplit.high, ySplit.high, stepLog, depth + 1);
 
-    // Combine results using Karatsuba formula
     const result = z2 * Math.pow(10, 2 * m) + (z1 - z2 - z0) * Math.pow(10, m) + z0;
 
     stepLog.push({
@@ -227,7 +222,6 @@ const DivideConquerUI = () => {
     } else {
       const digitCounts = [120, 140, 160, 180, 200, 220, 240, 260, 280, 300]; // All sizes > 100 digits
       digitCounts.forEach((digits, index) => {
-        // Generate numbers with specified digit count
         const generateLargeNumber = (numDigits) => {
           let result = '';
           result += Math.floor(Math.random() * 9) + 1; // First digit 1-9
@@ -241,7 +235,6 @@ const DivideConquerUI = () => {
         const num1Str = generateLargeNumber(digits);
         const num2Str = generateLargeNumber(digits);
         
-        // Store as string to preserve all digits
         files.push({
           id: index + 1,
           name: `integer_mult_input_${index + 1}.txt`,
@@ -291,9 +284,7 @@ const DivideConquerUI = () => {
     });
   };
 
-  // Updated Karatsuba to handle string numbers for large inputs
   const karatsubaMultiplyLarge = (x, y, stepLog = [], depth = 0) => {
-    // Handle both number and string inputs
     const xStr = typeof x === 'string' ? x : x.toString();
     const yStr = typeof y === 'string' ? y : y.toString();
     
@@ -305,7 +296,6 @@ const DivideConquerUI = () => {
       message: `Multiplying ${xStr.length}-digit × ${yStr.length}-digit numbers`
     });
 
-    // Base case: when numbers are small enough for regular multiplication
     if (xStr.length <= 15 && yStr.length <= 15) {
       const numX = parseInt(xStr);
       const numY = parseInt(yStr);
@@ -322,7 +312,6 @@ const DivideConquerUI = () => {
     const n = Math.max(xStr.length, yStr.length);
     const m = Math.floor(n / 2);
 
-    // Split numbers using string manipulation
     const splitNumber = (numStr, position) => {
       const str = numStr.padStart(n, '0');
       const highStr = str.substring(0, str.length - position) || '0';
@@ -346,7 +335,6 @@ const DivideConquerUI = () => {
       message: `Split at position ${m}`
     });
 
-    // Recursive calls with string numbers
     const z0 = karatsubaMultiplyLarge(xSplit.low, ySplit.low, stepLog, depth + 1);
     const z1 = karatsubaMultiplyLarge(
       addStrings(xSplit.low, xSplit.high), 
@@ -356,7 +344,6 @@ const DivideConquerUI = () => {
     );
     const z2 = karatsubaMultiplyLarge(xSplit.high, ySplit.high, stepLog, depth + 1);
 
-    // Combine results using Karatsuba formula with string arithmetic
     const term1 = multiplyByPowerOf10(z2, 2 * m);
     const term2 = multiplyByPowerOf10(subtractStrings(subtractStrings(z1, z2), z0), m);
     const result = addStrings(addStrings(term1, term2), z0);
@@ -374,7 +361,6 @@ const DivideConquerUI = () => {
     return result;
   };
 
-  // Helper function for string addition
   const addStrings = (a, b) => {
     let result = '';
     let carry = 0;
@@ -394,7 +380,6 @@ const DivideConquerUI = () => {
     return result;
   };
 
-  // Helper function for string subtraction (a >= b)
   const subtractStrings = (a, b) => {
     let result = '';
     let borrow = 0;
@@ -418,11 +403,9 @@ const DivideConquerUI = () => {
       j--;
     }
 
-    // Remove leading zeros
     return result.replace(/^0+/, '') || '0';
   };
 
-  // Helper function to multiply by power of 10 (add zeros)
   const multiplyByPowerOf10 = (num, power) => {
     return num + '0'.repeat(power);
   };
@@ -466,7 +449,6 @@ const DivideConquerUI = () => {
             <p className="text-blue-100">Visualize and analyze algorithmic efficiency</p>
           </div>
 
-          {/* Algorithm Selection */}
           <div className="p-8 border-b bg-gray-50">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">Select Algorithm</h2>
             <div className="grid grid-cols-2 gap-4">
@@ -516,7 +498,6 @@ const DivideConquerUI = () => {
             </div>
           </div>
 
-          {/* Input Section */}
           <div className="p-8 border-b">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">Generate Input Files</h2>
             <div className="grid grid-cols-2 gap-4">
@@ -595,7 +576,6 @@ const DivideConquerUI = () => {
             )}
           </div>
 
-          {/* Run Algorithm */}
           <div className="p-8 border-b bg-gray-50">
             <button
               onClick={runAlgorithm}
@@ -607,7 +587,6 @@ const DivideConquerUI = () => {
             </button>
           </div>
 
-          {/* Results */}
           {result && (
             <div className="p-8 border-b">
               <h2 className="text-xl font-semibold mb-4 text-gray-800">Result</h2>
@@ -656,7 +635,6 @@ const DivideConquerUI = () => {
             </div>
           )}
 
-          {/* Steps */}
           {steps.length > 0 && (
             <div className="p-8">
               <div className="flex items-center justify-between mb-4">
@@ -716,7 +694,6 @@ const DivideConquerUI = () => {
           )}
         </div>
 
-        {/* Info Footer */}
         <div className="mt-8 p-6 bg-white rounded-xl shadow-lg">
           <div className="flex items-start">
             <AlertCircle className="w-5 h-5 text-blue-600 mr-3 mt-1 flex-shrink-0" />
