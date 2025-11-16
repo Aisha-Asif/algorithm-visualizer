@@ -123,8 +123,7 @@ const DivideConquerUI = () => {
     return { result: finalResult, steps: stepLog };
   };
 
-  const karatsubaMultiply = (x, y, stepLog = [], depth = 0) => {
-    // Convert to strings to handle large numbers
+  const intMultMultiply = (x, y, stepLog = [], depth = 0) => {
     const xStr = x.toString();
     const yStr = y.toString();
     
@@ -136,7 +135,6 @@ const DivideConquerUI = () => {
       message: `Multiplying ${xStr.substring(0, 15)}${xStr.length > 15 ? '...' : ''} × ${yStr.substring(0, 15)}${yStr.length > 15 ? '...' : ''}`
     });
 
-    // Base case: use regular multiplication for small numbers
     if (x < 10 || y < 10) {
       const result = x * y;
       stepLog.push({
@@ -174,14 +172,14 @@ const DivideConquerUI = () => {
       message: `Split numbers at position ${m}`
     });
 
-    const z0 = karatsubaMultiply(xSplit.low, ySplit.low, stepLog, depth + 1);
-    const z1 = karatsubaMultiply(
+    const z0 = intMultMultiply(xSplit.low, ySplit.low, stepLog, depth + 1);
+    const z1 = intMultMultiply(
       xSplit.low + xSplit.high, 
       ySplit.low + ySplit.high, 
       stepLog, 
       depth + 1
     );
-    const z2 = karatsubaMultiply(xSplit.high, ySplit.high, stepLog, depth + 1);
+    const z2 = intMultMultiply(xSplit.high, ySplit.high, stepLog, depth + 1);
 
     const result = z2 * Math.pow(10, 2 * m) + (z1 - z2 - z0) * Math.pow(10, m) + z0;
 
@@ -202,12 +200,12 @@ const DivideConquerUI = () => {
     const files = [];
     
     if (selectedAlgorithm === 'closest-pair') {
-      const sizes = [150, 200, 250, 300, 350, 400, 450, 500, 550, 600]; // All sizes > 100
+      const sizes = [150, 200, 250, 300, 350, 400, 450, 500, 550, 600]; 
       sizes.forEach((size, index) => {
         const points = [];
         for (let i = 0; i < size; i++) {
           points.push([
-            Math.random() * 10000,  // Increased range for larger datasets
+            Math.random() * 10000,  
             Math.random() * 10000
           ]);
         }
@@ -220,15 +218,14 @@ const DivideConquerUI = () => {
         });
       });
     } else {
-      const digitCounts = [120, 140, 160, 180, 200, 220, 240, 260, 280, 300]; // All sizes > 100 digits
+      const digitCounts = [139, 131, 141, 146, 136, 130, 135, 140, 145, 150]; 
       digitCounts.forEach((digits, index) => {
         const generateLargeNumber = (numDigits) => {
           let result = '';
-          result += Math.floor(Math.random() * 9) + 1; // First digit 1-9
+          result += Math.floor(Math.random() * 3) + 1; 
           for (let i = 1; i < numDigits; i++) {
-            result += Math.floor(Math.random() * 10);
+            result += Math.floor(Math.random() * 3);
           }
-          // For very large numbers, we'll handle them as strings in the algorithm
           return result;
         };
 
@@ -239,7 +236,7 @@ const DivideConquerUI = () => {
           id: index + 1,
           name: `integer_mult_input_${index + 1}.txt`,
           size: digits,
-          data: { num1: num1Str, num2: num2Str }, // Store as string
+          data: { num1: num1Str, num2: num2Str }, 
           content: `${num1Str}\n${num2Str}`
         });
       });
@@ -258,8 +255,6 @@ const DivideConquerUI = () => {
     if (selectedAlgorithm === 'closest-pair') {
       setInputData(file.data);
     } else {
-      // For integer multiplication, parse the string numbers
-      // We'll handle them as strings in the algorithm to avoid precision issues
       setInputData(file.data);
     }
     
@@ -284,7 +279,7 @@ const DivideConquerUI = () => {
     });
   };
 
-  const karatsubaMultiplyLarge = (x, y, stepLog = [], depth = 0) => {
+  const intMultMultiplyLarge = (x, y, stepLog = [], depth = 0) => {
     const xStr = typeof x === 'string' ? x : x.toString();
     const yStr = typeof y === 'string' ? y : y.toString();
     
@@ -335,14 +330,14 @@ const DivideConquerUI = () => {
       message: `Split at position ${m}`
     });
 
-    const z0 = karatsubaMultiplyLarge(xSplit.low, ySplit.low, stepLog, depth + 1);
-    const z1 = karatsubaMultiplyLarge(
+    const z0 = intMultMultiplyLarge(xSplit.low, ySplit.low, stepLog, depth + 1);
+    const z1 = intMultMultiplyLarge(
       addStrings(xSplit.low, xSplit.high), 
       addStrings(ySplit.low, ySplit.high), 
       stepLog, 
       depth + 1
     );
-    const z2 = karatsubaMultiplyLarge(xSplit.high, ySplit.high, stepLog, depth + 1);
+    const z2 = intMultMultiplyLarge(xSplit.high, ySplit.high, stepLog, depth + 1);
 
     const term1 = multiplyByPowerOf10(z2, 2 * m);
     const term2 = multiplyByPowerOf10(subtractStrings(subtractStrings(z1, z2), z0), m);
@@ -425,11 +420,10 @@ const DivideConquerUI = () => {
         const stepLog = [];
         let product;
         
-        // Use the appropriate Karatsuba version based on input size
         if (typeof inputData.num1 === 'string' || typeof inputData.num2 === 'string') {
-          product = karatsubaMultiplyLarge(inputData.num1, inputData.num2, stepLog);
+          product = intMultMultiplyLarge(inputData.num1, inputData.num2, stepLog);
         } else {
-          product = karatsubaMultiply(inputData.num1, inputData.num2, stepLog);
+          product = intMultMultiply(inputData.num1, inputData.num2, stepLog);
         }
         
         setResult({ product });
@@ -449,6 +443,7 @@ const DivideConquerUI = () => {
             <p className="text-blue-100">Visualize and analyze algorithmic efficiency</p>
           </div>
 
+          {/* Algorithm Selection */}
           <div className="p-8 border-b bg-gray-50">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">Select Algorithm</h2>
             <div className="grid grid-cols-2 gap-4">
@@ -490,7 +485,7 @@ const DivideConquerUI = () => {
                 }`}
               >
                 <div className="text-2xl mb-2">🔢</div>
-                <h3 className="font-semibold text-lg mb-1">Karatsuba Multiplication</h3>
+                <h3 className="font-semibold text-lg mb-1">Integer Multiplication</h3>
                 <p className="text-sm text-gray-600">Efficient integer multiplication</p>
                 <p className="text-xs text-gray-500 mt-2">Time: O(n^1.585)</p>
                 <p className="text-xs text-red-500 mt-1">Min: 100+ digits</p>
@@ -498,6 +493,7 @@ const DivideConquerUI = () => {
             </div>
           </div>
 
+          {/* Input Section */}
           <div className="p-8 border-b">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">Generate Input Files</h2>
             <div className="grid grid-cols-2 gap-4">
@@ -576,6 +572,7 @@ const DivideConquerUI = () => {
             )}
           </div>
 
+          {/* Run Algorithm */}
           <div className="p-8 border-b bg-gray-50">
             <button
               onClick={runAlgorithm}
@@ -587,6 +584,7 @@ const DivideConquerUI = () => {
             </button>
           </div>
 
+          {/* Results */}
           {result && (
             <div className="p-8 border-b">
               <h2 className="text-xl font-semibold mb-4 text-gray-800">Result</h2>
@@ -635,6 +633,7 @@ const DivideConquerUI = () => {
             </div>
           )}
 
+          {/* Steps */}
           {steps.length > 0 && (
             <div className="p-8">
               <div className="flex items-center justify-between mb-4">
@@ -694,6 +693,7 @@ const DivideConquerUI = () => {
           )}
         </div>
 
+        {/* Info Footer */}
         <div className="mt-8 p-6 bg-white rounded-xl shadow-lg">
           <div className="flex items-start">
             <AlertCircle className="w-5 h-5 text-blue-600 mr-3 mt-1 flex-shrink-0" />
