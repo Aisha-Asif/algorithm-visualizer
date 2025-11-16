@@ -2,7 +2,7 @@
 
 A React web application that visually demonstrates Divide and Conquer algorithms with step-by-step execution.
 
-## 🎯 Algorithms
+## Algorithms
 
 - **Closest Pair of Points**: Finds the closest pair in 2D plane (O(n log n))
 - **Karatsuba Multiplication**: Efficient large integer multiplication (O(n^1.585)) 
@@ -52,6 +52,3 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to use the v
 2. Generate 10 sample input files or use your own input file.
 3. Click **Run Algorithm** to see results and step-by-step execution.
 4. Optionally, download generated input files for offline testing.
-
-Do you want me to do that?
-```
